@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EGGY PARTY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            background-color: #FFE45C;
+        }
+
+        .container {
+            background: url('img/bg.png') no-repeat top center;
+            background-size: 100% auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 500px;
+            padding-bottom: 80px;
+        }
+
+        .title {
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .title h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .title h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #4080FF;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin: 1rem 0 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer {
+            display: flex;
+            
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 16px;
+        }
+
+        .timer span {
+            font-weight: bold;
+        }
+
+        .reward {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .coin-icon {
+            width: 100px;
+            height: 100px;
+            /* background-color: #4080FF; */
+            object-fit: contain;
+        }
+
+        .reward-info {
+            min-height: 90px;
+          
+            flex-grow: 1;
+        }
+
+        .reward-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .reward-original {
+            color: #999;
+           
+            margin-top: 0.2rem;
+        }
+
+        .claim-button {
+            background-color: #ff4242;
+            color: white;
+            border: none;
+            width: 100px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 60px;
+        }
+
+        .claim-button:hover {
+            background-color: #ff8989;
+        }
+        .nowPrice{
+            text-decoration: none;
+            font-size: 20px;
+            color: #FFE45C;
+        }
+        .Black{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 9999;
+            display: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .Black.show {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .Lqbox {
+            width: 80%;
+            height: 280px;
+            margin: auto;
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            border-radius: 10px;
+            padding: 20px;
+            padding-bottom: 10px;
+            line-height: 1.5;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .Black.show .Lqbox {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .lqbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .lqbox-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            width: 24px;
+            height: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #999;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .close-btn:hover {
+            opacity: 0.7;
+            transform: rotate(90deg);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-group label span {
+            color: red;
+            margin-right: 4px;
+        }
+
+        .game-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff4242;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #ff8989;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+
+        .toast-message {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 10000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center;padding-left: 30px;"><img width="85%" src="img/logo.webp" alt=""></div>
+        <div class="subtitle">《蛋仔派对》主播专属赠送</div>
+        <div class="card">
+            <div class="timer">
+                <div>
+                    <span id="days">29</span> 天 
+                    <span id="hours">23</span> 时 
+                    <span id="minutes">23</span> 分 
+                    <span id="seconds">23</span> 秒
+                </div>
+                <div>后 结束抢购</div>
+            </div>
+            <div class="reward">
+                <img src="img/icon0.png" alt="Coin" class="coin-icon">
+                <div class="reward-info">
+                    <div class="reward-amount">10000蛋币</div>
+                    <div class="reward-original"> <span class="nowPrice">0</span> <span style="text-decoration: line-through;">3200</span></div>
+                </div>
+                <button class="claim-button">免费领取</button>
+            </div>
+        </div>
+    </div>
+<div class="Black">
+    <div class="Lqbox">
+        <div class="lqbox-header">
+            <div class="lqbox-title">领取奖励</div>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="input-group">
+            <label><span>*</span>游戏名称</label>
+            <input type="text" class="game-input" placeholder="请输入您的游戏名称" required>
+        </div>
+        <button class="submit-btn">点击领取</button>
+    </div>
+</div>
+    <script>
+        function startCountdown() {
+            // Set the initial time (29 days, 23 hours, 23 minutes, 23 seconds)
+            let totalSeconds = 29 * 24 * 60 * 60 + 23 * 60 * 60 + 23 * 60 + 23;
+            
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            const countdown = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(countdown);
+                    return;
+                }
+                
+                const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                const seconds = totalSeconds % 60;
+                
+                daysEl.textContent = days;
+                hoursEl.textContent = hours.toString().padStart(2, '0');
+                minutesEl.textContent = minutes.toString().padStart(2, '0');
+                secondsEl.textContent = seconds.toString().padStart(2, '0');
+                
+                totalSeconds--;
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            startCountdown();
+
+            const submitBtn = document.querySelector('.submit-btn');
+            const closeBtn = document.querySelector('.close-btn');
+            const blackOverlay = document.querySelector('.Black');
+            const claimButton = document.querySelector('.claim-button');
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.textContent = '领取成功，24小时后登录游戏查看';
+            document.body.appendChild(toast);
+
+            claimButton.addEventListener('click', function() {
+                blackOverlay.style.display = 'block';
+                setTimeout(() => {
+                    blackOverlay.classList.add('show');
+                }, 10);
+            });
+
+            submitBtn.addEventListener('click', function() {
+                // 清空编辑框内容
+                document.querySelector('.game-input').value = '';
+                
+                blackOverlay.classList.remove('show');
+                
+                setTimeout(() => {
+                    blackOverlay.style.display = 'none';
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        toast.classList.add('show');
+                        
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                            setTimeout(() => {
+                                toast.style.display = 'none';
+                            }, 300);
+                        }, 2000);
+                    }, 10);
+                }, 300);
+            });
+
+            closeBtn.addEventListener('click', function() {
+                blackOverlay.classList.remove('show');
+                setTimeout(() => {
+                    blackOverlay.style.display = 'none';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
