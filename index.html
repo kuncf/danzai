@@ -262,13 +262,15 @@
     <div class="container">
         <div style="text-align: center;padding-left: 30px;"><img width="85%" src="img/logo.webp" alt=""></div>
         <div class="subtitle">《蛋仔派对》主播专属赠送</div>
+        
+        <!-- 第一个 card（原有的） -->
         <div class="card">
             <div class="timer">
                 <div>
-                    <span id="days">29</span> 天 
-                    <span id="hours">23</span> 时 
-                    <span id="minutes">23</span> 分 
-                    <span id="seconds">23</span> 秒
+                    <span id="days1">29</span> 天 
+                    <span id="hours1">23</span> 时 
+                    <span id="minutes1">23</span> 分 
+                    <span id="seconds1">23</span> 秒
                 </div>
                 <div>后 结束抢购</div>
             </div>
@@ -277,6 +279,48 @@
                 <div class="reward-info">
                     <div class="reward-amount">10000蛋币</div>
                     <div class="reward-original"> <span class="nowPrice">0</span> <span style="text-decoration: line-through;">3200</span></div>
+                </div>
+                <button class="claim-button">免费领取</button>
+            </div>
+        </div>
+
+        <!-- 第二个 card -->
+        <div class="card" style="margin-top: 20px;">
+            <div class="timer">
+                <div>
+                    <span id="days2">29</span> 天 
+                    <span id="hours2">23</span> 时 
+                    <span id="minutes2">23</span> 分 
+                    <span id="seconds2">23</span> 秒
+                </div>
+                <div>后 结束抢购</div>
+            </div>
+            <div class="reward">
+                <img src="img/0.webp" alt="Coin" class="coin-icon">
+                <div class="reward-info">
+                    <div class="reward-amount">破誓骑士凯恩</div>
+                    <div class="reward-original"> <span class="nowPrice">0</span> <span style="text-decoration: line-through;">6400</span></div>
+                </div>
+                <button class="claim-button">免费领取</button>
+            </div>
+        </div>
+
+        <!-- 第三个 card -->
+        <div class="card" style="margin-top: 20px;">
+            <div class="timer">
+                <div>
+                    <span id="days3">29</span> 天 
+                    <span id="hours3">23</span> 时 
+                    <span id="minutes3">23</span> 分 
+                    <span id="seconds3">23</span> 秒
+                </div>
+                <div>后 结束抢购</div>
+            </div>
+            <div class="reward">
+                <img src="img/1.webp" alt="Coin" class="coin-icon">
+                <div class="reward-info">
+                    <div class="reward-amount">暗夜皇女德茜拉</div>
+                    <div class="reward-original"> <span class="nowPrice">0</span> <span style="text-decoration: line-through;">6400</span></div>
                 </div>
                 <button class="claim-button">免费领取</button>
             </div>
@@ -300,10 +344,13 @@
             // Set the initial time (29 days, 23 hours, 23 minutes, 23 seconds)
             let totalSeconds = 29 * 24 * 60 * 60 + 23 * 60 * 60 + 23 * 60 + 23;
             
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
+            // 为三个计时器分别获取元素
+            const timers = [1, 2, 3].map(num => ({
+                days: document.getElementById(`days${num}`),
+                hours: document.getElementById(`hours${num}`),
+                minutes: document.getElementById(`minutes${num}`),
+                seconds: document.getElementById(`seconds${num}`)
+            }));
             
             const countdown = setInterval(() => {
                 if (totalSeconds <= 0) {
@@ -316,10 +363,13 @@
                 const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
                 const seconds = totalSeconds % 60;
                 
-                daysEl.textContent = days;
-                hoursEl.textContent = hours.toString().padStart(2, '0');
-                minutesEl.textContent = minutes.toString().padStart(2, '0');
-                secondsEl.textContent = seconds.toString().padStart(2, '0');
+                // 更新所有计时器
+                timers.forEach(timer => {
+                    timer.days.textContent = days;
+                    timer.hours.textContent = hours.toString().padStart(2, '0');
+                    timer.minutes.textContent = minutes.toString().padStart(2, '0');
+                    timer.seconds.textContent = seconds.toString().padStart(2, '0');
+                });
                 
                 totalSeconds--;
             }, 1000);
@@ -331,18 +381,22 @@
             const submitBtn = document.querySelector('.submit-btn');
             const closeBtn = document.querySelector('.close-btn');
             const blackOverlay = document.querySelector('.Black');
-            const claimButton = document.querySelector('.claim-button');
+            // 获取所有的免费领取按钮
+            const claimButtons = document.querySelectorAll('.claim-button');
             
             const toast = document.createElement('div');
             toast.className = 'toast-message';
             toast.textContent = '领取成功，24小时后登录游戏查看';
             document.body.appendChild(toast);
 
-            claimButton.addEventListener('click', function() {
-                blackOverlay.style.display = 'block';
-                setTimeout(() => {
-                    blackOverlay.classList.add('show');
-                }, 10);
+            // 为每个免费领取按钮添加点击事件
+            claimButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    blackOverlay.style.display = 'block';
+                    setTimeout(() => {
+                        blackOverlay.classList.add('show');
+                    }, 10);
+                });
             });
 
             submitBtn.addEventListener('click', function() {
