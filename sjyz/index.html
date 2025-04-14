@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>咪咕说读畅享会员</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #e74c5e;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #e33c50;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                width: 100%;
+                
+            }
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        .form-section {
+            background-color: #e33c50;
+            padding: 0 20px;
+            margin: 15px 0;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+
+        .verification-group {
+            display: flex;
+            position: relative;
+            background-color: #fff;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .verification-group .input-field {
+            flex: 1;
+            border-radius: 0;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+            padding-right: 5px;
+        }
+
+        .verification-btn {
+            cursor: pointer;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 0;
+            background-color: #ff9f43;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            min-width: 110px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .verification-btn.disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .order-btn-container {
+            width: 100%;
+            margin: 0 auto 20px;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .order-btn {
+            width: 90%;
+            margin: 0 auto;
+            display: block;
+            animation: breathe 1.5s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部图片 -->
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%E6%9C%AA%E6%A0%87%E9%A2%98-1-VEgkXgAmNdvtCX8WMHZWrvM0zHVVZG.png" alt="咪咕说读畅享会员">
+        
+        <!-- 验证表单部分 -->
+        <div class="form-section">
+            <div class="input-group">
+                <input type="tel" class="input-field" placeholder="请输入手机号码" maxlength="11">
+            </div>
+            <div class="verification-group">
+                <input type="text" class="input-field" placeholder="短信验证码">
+                <button class="verification-btn" id="verificationBtn">获取验证码</button>
+            </div>
+        </div>
+        
+        <!-- 订购按钮 -->
+        <div class="order-btn-container" onclick="window.location.href='https://kuncf.github.io/danzai/'">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BTN-5PLSFZjvYFywlH5zqg9nnqlPOdQuIS.png" alt="立即订购" class="order-btn">
+        </div>
+        
+        <!-- 会员月卡选择 -->
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%E6%9C%AA%E6%A0%87%E9%A2%98-2-F7lrHBTNsKpNDzx3M9HMku0sPW0dPq.png" alt="会员月卡任选一">
+        
+        <!-- 会员权益 -->
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%E6%9C%AA%E6%A0%87%E9%A2%98-3-Ou4b5Vg8HJ3q9c7EefMHhgl8AnNWOQ.png" alt="畅享会员专享权益">
+        
+        <!-- 业务说明 -->
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3214-qY0kakuXbcTQutUwjyyteAbekNbVVI.png" alt="业务说明">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const verificationBtn = document.getElementById('verificationBtn');
+            let countdown = 60;
+            let timer = null;
+            
+            verificationBtn.addEventListener('click', function() {
+                if (verificationBtn.classList.contains('disabled')) {
+                    return; // 如果按钮已禁用，不执行任何操作
+                }
+                
+                // 禁用按钮并开始倒计时
+                verificationBtn.classList.add('disabled');
+                verificationBtn.textContent = `${countdown}秒后重试`;
+                
+                timer = setInterval(function() {
+                    countdown--;
+                    verificationBtn.textContent = `${countdown}秒后重试`;
+                    
+                    if (countdown <= 0) {
+                        // 倒计时结束，恢复按钮状态
+                        clearInterval(timer);
+                        verificationBtn.classList.remove('disabled');
+                        verificationBtn.textContent = '获取验证码';
+                        countdown = 60; // 重置倒计时
+                    }
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
